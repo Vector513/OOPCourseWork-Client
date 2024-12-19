@@ -1,0 +1,11 @@
+release/application.o
+release/gamesession.o
+release/goldbox.o
+release/main.o
+release/mainwindow.o
+release/tcpServer.o
+release/moc_application.o
+release/moc_gamesession.o
+release/moc_goldbox.o
+release/moc_mainwindow.o
+release/moc_tcpServer.o

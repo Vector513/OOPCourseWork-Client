@@ -1,7 +1,10 @@
 #include "Menu.h"
 
-Menu::Menu(QWidget *parent)
+Menu::Menu(TcpClient *otherTcpClient, QWidget *parent)
     : QWidget(parent)
+    , tcpClient(otherTcpClient)
+    , host("192.168.31.227")
+    , port(10001)
 {
     // Устанавливаем общий стиль для окна
     setStyleSheet(R"(
@@ -30,4 +33,10 @@ Menu::Menu(QWidget *parent)
 
     // Подключаем сигнал кнопки к пользовательскому сигналу
     connect(findOpponentButton, &QPushButton::clicked, this, &Menu::findOpponentClicked);
+    connect(findOpponentButton, &QPushButton::clicked, this, &Menu::onFindOpponentClicked);
+}
+
+void Menu::onFindOpponentClicked()
+{
+    tcpClient->connectToServer(host, port);
 }

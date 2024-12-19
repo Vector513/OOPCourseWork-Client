@@ -6,29 +6,32 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QTimer>
+#include "TcpClient.h"
 
-class OpponentSearchWindow : public QWidget {
+class OpponentSearchWindow : public QWidget
+{
     Q_OBJECT
 
 public:
-    explicit OpponentSearchWindow(QWidget *parent = nullptr);
+    explicit OpponentSearchWindow(TcpClient* otherTcpClient, QWidget *parent = nullptr);
+
+    void startWork();    // Запуск работы окна
+    void resetState();   // Сброс состояния окна
 
 signals:
-    void searchCanceled(); // Сигнал для возврата в меню
+    void searchCanceled();
     void startTmpGame();
 
-private:
-    QLabel *timerLabel;     // Для отображения времени
-    QTimer *timer;          // Таймер для отсчета времени
-    int elapsedTime;        // Счетчик секунд
-
-    //QPushButton *tmpGameButton;
-
 private slots:
-    void updateTimer();     // Обновление времени на экране
-    void cancelSearch();    // Обработчик кнопки отмены
-
+    void updateTimer();
+    void cancelSearch();
     void onTmpButtonClicked();
+
+private:
+    TcpClient* tcpClient;
+    QLabel* timerLabel;
+    QTimer* timer;
+    int elapsedTime;
 };
 
 #endif // OPPONENTSEARCHWINDOW_H

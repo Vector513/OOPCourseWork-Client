@@ -4,13 +4,15 @@
 #include <QWidget>
 #include <QLabel>
 #include <QTimer>
+#include <QPushButton>
 #include "GameField.h"
+#include "TcpClient.h"
 
 class GameWindow : public QWidget {
     Q_OBJECT
 
 public:
-    explicit GameWindow(QWidget *parent = nullptr);
+    explicit GameWindow(TcpClient* otherTcpClient, QWidget *parent = nullptr);
 
 signals:
     void returnToMenu();
@@ -18,43 +20,23 @@ signals:
 private slots:
     void updateTimer();
     void onExitClicked();
-    void onGoldBoxClicked(int index);  // Слот для обработки открытия ящика с золотом
+    void onEndTurnClicked();
+    void onContinueClicked();
+    void onGoldBoxClicked(int index);
 
 private:
-    QLabel *scoreLabel;         // Отображение счета
-    QLabel *turnLabel;          // Номер хода
-    QLabel *timeLabel;          // Таймер игры
-    QTimer *timer;              // Таймер игры
-    int seconds;                // Секунды для таймера
-    GameField *gameField;       // Игровое поле
+    TcpClient *tcpClient;
+    QLabel *scoreLabel;
+    QLabel *turnLabel;
+    QLabel *timeLabel;
+    QTimer *timer;  // Объект для таймера
+    int seconds;
 
     QPushButton *exitButton;
+    QPushButton *endTurnButton;
+    QPushButton *continueButton;
+
+    GameField *gameField;  // Объект GameField
 };
 
 #endif // GAMEWINDOW_H
-
-
-
-
-
-/*
-#ifndef GAMEWINDOW_H
-#define GAMEWINDOW_H
-
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QPushButton>
-#include <QLabel>
-
-class GameWindow : public QWidget {
-    Q_OBJECT
-
-public:
-    explicit GameWindow(QWidget *parent = nullptr);
-
-signals:
-    void returnToSettings();  // Сигнал для возврата в меню настроек
-};
-
-#endif // GAMEWINDOW_H
-*/

@@ -4,7 +4,9 @@
 #include <QLabel>
 #include <QPushButton>
 
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
+MainWindow::MainWindow(TcpClient *otherTcpClient, QWidget *parent)
+    : QWidget(parent)
+    , tcpClient(otherTcpClient)
 {
     setWindowTitle("Главное окно");
     setMinimumSize(400, 300);
@@ -26,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
     backgroundLabel->setLayout(backgroundLayout);  // Устанавливаем layout для backgroundLabel
 
     // Создаем экземпляр меню
-    menu = new Menu(backgroundLabel);
+    menu = new Menu(tcpClient, backgroundLabel);
     menu->setStyleSheet("background-color: transparent;"); // Меню с прозрачным фоном
 
     // Добавляем меню в layout backgroundLabel

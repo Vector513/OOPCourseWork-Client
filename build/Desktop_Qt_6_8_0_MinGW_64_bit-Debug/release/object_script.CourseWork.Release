@@ -6,6 +6,7 @@ release/main.o
 release/mainwindow.o
 release/menu.o
 release/opponentsearchwindow.o
+release/tcpClient.o
 release/qrc_resources.o
 release/moc_application.o
 release/moc_gamefield.o
@@ -14,3 +15,4 @@ release/moc_goldbox.o
 release/moc_mainwindow.o
 release/moc_menu.o
 release/moc_opponentsearchwindow.o
+release/moc_tcpClient.o

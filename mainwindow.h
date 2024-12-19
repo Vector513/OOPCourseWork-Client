@@ -11,12 +11,13 @@ class MainWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(TcpClient *otherTcpClient, QWidget *parent = nullptr);
 
 signals:
     void findOpponentClicked();
 
 private:
+    TcpClient *tcpClient;
     QLabel *backgroundLabel;  // Для фона с картинкой
     Menu *menu;               // Меню без фона
 };

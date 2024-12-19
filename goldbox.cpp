@@ -1,16 +1,46 @@
 #include "GoldBox.h"
-#include <QPushButton>
-#include <QVBoxLayout>
 
-GoldBox::GoldBox(QWidget *parent) : QWidget(parent), index(-1) {
-    button = new QPushButton("Ящик с золотом", this);
-    button->setStyleSheet("width: 60px; height: 60px; font-size: 14px;");
+GoldBox::GoldBox(int index, QWidget *parent)
+    : QPushButton(parent), index(index), goldAmount(0), open(false),
+    closedIcon(":/images/images/goldBoxClosed.jpg"), openedIcon(":/images/images/goldBoxOpened.jpg") {
+    setIcon(closedIcon);
+    setIconSize(QSize(64, 64));
+    setFlat(true);
+    setStyleSheet("border: none;");
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(button);
-    setLayout(layout);
+    connect(this, &QPushButton::clicked, this, &GoldBox::handleClick);
+}
 
-    connect(button, &QPushButton::clicked, this, [this]() {
-        emit goldBoxClicked(index);  // Генерируем сигнал, когда ящик с золотом открыт
-    });
+void GoldBox::handleClick() {
+    emit goldBoxClicked(index);
+}
+
+void GoldBox::openBox(int goldAmount) {
+    if (!open) {
+        this->goldAmount = goldAmount;
+        open = true;
+        updateIcon();
+    }
+}
+
+void GoldBox::resetBox() {
+    goldAmount = 0;
+    open = false;
+    updateIcon();
+}
+
+bool GoldBox::isOpen() const {
+    return open;
+}
+
+int GoldBox::getGoldAmount() const {
+    return goldAmount;
+}
+
+int GoldBox::getIndex() const {
+    return index;
+}
+
+void GoldBox::updateIcon() {
+    setIcon(open ? openedIcon : closedIcon);
 }

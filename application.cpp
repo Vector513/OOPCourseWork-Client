@@ -1,7 +1,10 @@
 #include "Application.h"
 #include <QVBoxLayout>
 
-Application::Application(QWidget *parent) : QWidget(parent) {
+Application::Application(TcpClient *otherTcpClient, QWidget *parent)
+    : QWidget(parent)
+    , tcpClient(otherTcpClient)
+{
     setWindowTitle("Главное окно");
     setMinimumSize(800, 600);
 
@@ -9,51 +12,55 @@ Application::Application(QWidget *parent) : QWidget(parent) {
     setupConnections();
 }
 
-void Application::setupLayout() {
-    // Создаем основное окно с вертикальным layout
+void Application::setupLayout()
+{
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
-    // Создаем QStackedWidget для переключения между окнами
     stackedWidget = new QStackedWidget(this);
 
-    // Инициализация меню и окна поиска соперника
-    mainWindow = new MainWindow(this);
-    opponentSearchWindow = new OpponentSearchWindow(this);
-    gameWindow = new GameWindow(this);
+    mainWindow = new MainWindow(tcpClient, this);
+    opponentSearchWindow = new OpponentSearchWindow(tcpClient, this);
+    gameWindow = new GameWindow(tcpClient, this);
 
-    // Добавляем оба окна в QStackedWidget
-    stackedWidget->addWidget(mainWindow);               // Главное меню
-    stackedWidget->addWidget(opponentSearchWindow); // Окно поиска соперника
+    stackedWidget->addWidget(mainWindow);
+    stackedWidget->addWidget(opponentSearchWindow);
     stackedWidget->addWidget(gameWindow);
 
-    // Устанавливаем первый виджет в качестве видимого
-    stackedWidget->setCurrentIndex(0); // Индекс 0 - Главное меню
+    stackedWidget->setCurrentIndex(0);
 
-    // Добавляем QStackedWidget в layout
     mainLayout->addWidget(stackedWidget);
     setLayout(mainLayout);
 }
 
-void Application::setupConnections() {
-    // Подключаем сигнал кнопки "Найти соперника" к слоту
+void Application::setupConnections()
+{
+    connect(tcpClient, &TcpClient::messageReceived, this, &Application::onMessageReceived);
+    connect(tcpClient, &TcpClient::disconnected, this, &Application::onSearchCanceled);
     connect(mainWindow, &MainWindow::findOpponentClicked, this, &Application::onFindOpponent);
-
-    // Подключаем сигнал отмены поиска соперника
     connect(opponentSearchWindow, &OpponentSearchWindow::searchCanceled, this, &Application::onSearchCanceled);
     connect(gameWindow, &GameWindow::returnToMenu, this, &Application::onSearchCanceled);
     connect(opponentSearchWindow, &OpponentSearchWindow::startTmpGame, this, &Application::onStartTmpGame);
 }
 
-void Application::onFindOpponent() {
-    // Переключаем на окно поиска соперника
-    stackedWidget->setCurrentIndex(1); // Индекс 1 - Окно поиска соперника
+void Application::onFindOpponent()
+{
+    stackedWidget->setCurrentWidget(opponentSearchWindow);
+    opponentSearchWindow->startWork();
 }
 
-void Application::onSearchCanceled() {
-    // Возвращаемся в главное меню
-    stackedWidget->setCurrentIndex(0); // Индекс 0 - Главное меню
+void Application::onSearchCanceled()
+{
+    stackedWidget->setCurrentWidget(mainWindow);
+    opponentSearchWindow->resetState();
+}
+
+void Application::onMessageReceived(const QString& message)
+{
+    if (message == "opponentfound") {
+        onStartTmpGame();
+    }
 }
 
 void Application::onStartTmpGame() {
-    stackedWidget->setCurrentIndex(2);
+    stackedWidget->setCurrentWidget(gameWindow);
 }

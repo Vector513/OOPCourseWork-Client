@@ -2,107 +2,94 @@
 #include <QGridLayout>
 #include <QTime>
 #include <QLabel>
+#include <QPushButton>
 
-GameWindow::GameWindow(QWidget *parent) : QWidget(parent), seconds(0) {
+GameWindow::GameWindow(TcpClient* otherTcpClient, QWidget *parent)
+    : QWidget(parent)
+    , tcpClient(otherTcpClient)
+    , seconds(0)
+{
     setWindowTitle("Окно игры");
     setMinimumSize(800, 600);
 
-    // Создаем layout
+    // Создаем макет
     QGridLayout *gridLayout = new QGridLayout(this);
 
-    // Заголовок для игры
     QLabel *gameTitle = new QLabel("Игровое окно");
     gameTitle->setAlignment(Qt::AlignCenter);
     gameTitle->setStyleSheet("font-size: 20px; font-weight: bold;");
-    gridLayout->addWidget(gameTitle, 0, 0, 1, 3);  // Заголовок на весь верхний ряд
+    gridLayout->addWidget(gameTitle, 0, 0, 1, 3);
 
-    // Игровое поле
-    gameField = new GameField(this);
-    gridLayout->addWidget(gameField, 1, 0, 3, 3);  // Игровое поле на весь основной контент
+    // Инициализация игрового поля
+    gameField = new GameField(tcpClient, this);
+    gridLayout->addWidget(gameField, 1, 0, 3, 3);
 
-    // Окно счета
+    // Создаем лейблы
     scoreLabel = new QLabel("Счет: 0");
     scoreLabel->setStyleSheet("font-size: 16px;");
     gridLayout->addWidget(scoreLabel, 1, 3);
 
-    // Окно номера хода
     turnLabel = new QLabel("Ход: 1");
     turnLabel->setStyleSheet("font-size: 16px;");
     gridLayout->addWidget(turnLabel, 2, 3);
 
-    // Таймер игры
     timeLabel = new QLabel("Время: 00:00");
     timeLabel->setStyleSheet("font-size: 16px;");
     gridLayout->addWidget(timeLabel, 3, 3);
 
+    // Кнопки
     exitButton = new QPushButton("В главное меню");
     exitButton->setStyleSheet("background-color: #e74c3c; color: white; padding: 10px; font-size: 16px;");
     gridLayout->addWidget(exitButton, 4, 0, 1, 4);
 
-    // Настройка таймера
+    endTurnButton = new QPushButton("Закончить ходы");
+    endTurnButton->setStyleSheet("background-color: #3498db; color: white; padding: 10px; font-size: 16px;");
+    gridLayout->addWidget(endTurnButton, 5, 0, 1, 2);
+
+    continueButton = new QPushButton("Продолжить");
+    continueButton->setStyleSheet("background-color: #2ecc71; color: white; padding: 10px; font-size: 16px;");
+    gridLayout->addWidget(continueButton, 5, 2, 1, 2);
+
+    // Создаем таймер
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &GameWindow::updateTimer);
-    timer->start(1000);  // Таймер обновляется каждую секунду
+    timer->start(1000);
+
+    // Подключаем сигналы и слоты
+    connect(exitButton, &QPushButton::clicked, this, &GameWindow::onExitClicked);
+    connect(endTurnButton, &QPushButton::clicked, this, &GameWindow::onEndTurnClicked);
+    connect(continueButton, &QPushButton::clicked, this, &GameWindow::onContinueClicked);
+
+    // Подключаем сигнал от игрового поля
+    connect(gameField, &GameField::goldBoxClicked, this, &GameWindow::onGoldBoxClicked);
 
     setLayout(gridLayout);
-
-    // Подключаем сигнал для открытия ящика с золотом
-    connect(gameField, &GameField::goldBoxClicked, this, &GameWindow::onGoldBoxClicked);
-    connect(exitButton, &QPushButton::clicked, this, &GameWindow::onExitClicked);
 }
 
 void GameWindow::updateTimer() {
-    seconds++;  // Увеличиваем счетчик времени
+    seconds++;
 
     QTime time(0, 0);
-    time = time.addSecs(seconds);  // Преобразуем в формат времени
+    time = time.addSecs(seconds);
 
     timeLabel->setText("Время: " + time.toString("mm:ss"));
 }
 
-void GameWindow::onGoldBoxClicked(int index) {
-    // Обрабатываем клик по ящику с золотом (например, увеличиваем счет)
-    // Логика обработки открытия ящика с золотом
-    qDebug() << "Ящик с золотом с индексом" << index << "был открыт!";
+void GameWindow::onEndTurnClicked() {
+    tcpClient->sendData("finalturn");
+    qDebug() << "Ход завершен!";
+}
+
+void GameWindow::onContinueClicked() {
+    tcpClient->sendData("continue");
+    qDebug() << "Ход продолжается!";
 }
 
 void GameWindow::onExitClicked() {
-    // Отправляем сигнал для возврата в меню
+    tcpClient->disconnectFromServer();
     emit returnToMenu();
 }
 
-/*
-#include "GameWindow.h"
-
-GameWindow::GameWindow(QWidget *parent) : QWidget(parent) {
-    // Применяем стили к окну игры
-    setStyleSheet(R"(
-        background-color: #ffffff;
-        font-family: 'Helvetica', sans-serif;
-        font-size: 16px;
-        color: #333;
-        padding: 15px;
-    )");
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-
-    // Заголовок
-    QLabel *label = new QLabel("Игра началась!");
-    label->setStyleSheet("font-size: 20px; font-weight: bold; color: #2C3E50;");
-    QPushButton *backButton = new QPushButton("Вернуться к настройкам");
-    backButton->setStyleSheet(R"(
-        background-color: #f39c12;
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 16px;
-    )");
-
-    layout->addWidget(label);
-    layout->addWidget(backButton);
-    setLayout(layout);
-
-    // Подключаем сигнал для возврата в меню настроек
-    connect(backButton, &QPushButton::clicked, this, &GameWindow::returnToSettings);
+void GameWindow::onGoldBoxClicked(int index) {
+    qDebug() << "Ящик с золотом с индексом" << index << "был открыт!";
 }
-*/

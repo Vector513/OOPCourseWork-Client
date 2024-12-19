@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += network
 RESOURCES += \
     resources.qrc
 
@@ -18,7 +19,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     menu.cpp \
-    opponentsearchwindow.cpp
+    opponentsearchwindow.cpp \
+    tcpClient.cpp
 
 HEADERS += \
     application.h \
@@ -27,7 +29,8 @@ HEADERS += \
     goldbox.h \
     mainwindow.h \
     menu.h \
-    opponentsearchwindow.h
+    opponentsearchwindow.h \
+    tcpClient.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QStackedWidget>
+#include "TcpClient.h"
 #include "MainWindow.h"
 #include "OpponentSearchWindow.h"
 #include "GameWindow.h"
@@ -11,19 +12,23 @@ class Application : public QWidget {
     Q_OBJECT
 
 public:
-    explicit Application(QWidget *parent = nullptr);
+    explicit Application(TcpClient* otherTcpClient, QWidget *parent = nullptr);
 
 private:
     void setupLayout();
     void setupConnections();
 
 private slots:
+    void onMessageReceived(const QString& message);
+
     void onFindOpponent();
     void onSearchCanceled();
     void onStartTmpGame();
 
 private:
-    QStackedWidget *stackedWidget; // Контейнер для переключаемых окон
+    TcpClient *tcpClient;
+
+    QStackedWidget *stackedWidget;
     MainWindow *mainWindow;
     OpponentSearchWindow *opponentSearchWindow;
     GameWindow *gameWindow;
