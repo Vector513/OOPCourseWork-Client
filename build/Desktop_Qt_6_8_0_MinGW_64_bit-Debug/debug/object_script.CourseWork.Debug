@@ -1,0 +1,16 @@
+debug/application.o
+debug/gamefield.o
+debug/gamewindow.o
+debug/goldbox.o
+debug/main.o
+debug/mainwindow.o
+debug/menu.o
+debug/opponentsearchwindow.o
+debug/qrc_resources.o
+debug/moc_application.o
+debug/moc_gamefield.o
+debug/moc_gamewindow.o
+debug/moc_goldbox.o
+debug/moc_mainwindow.o
+debug/moc_menu.o
+debug/moc_opponentsearchwindow.o
