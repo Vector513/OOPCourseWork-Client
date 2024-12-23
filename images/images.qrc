@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>background1.jpg</file>
+        <file>background2.jpg</file>
+        <file>background3.jpg</file>
+        <file>background5.jpg</file>
+        <file>FindOpponentWidgetBackground.jpg</file>
+        <file>gold.jpg</file>
+        <file>GoldBox.jpg</file>
+        <file>goldBoxClosed.jpg</file>
+        <file>goldBoxes-ezgif.com-crop.jpg</file>
+        <file>goldBoxes-ezgif.com-crop2.jpg</file>
+        <file>goldBoxes-ezgif.com-crop3.jpg</file>
+        <file>goldBoxes.jpg</file>
+        <file>goldBoxOpened.jpg</file>
+        <file>images.qrc</file>
+        <file>MainWidgetBackground.jpg</file>
+    </qresource>
+</RCC>
