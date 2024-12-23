@@ -12,22 +12,34 @@ CONFIG += c++17
 SOURCES += \
     findopponentmenuwidget.cpp \
     findopponentwidget.cpp \
+    gamefieldwidget.cpp \
+    gameinfowidget.cpp \
+    gameresultwidget.cpp \
+    gamewidget.cpp \
+    goldboxwidget.cpp \
     main.cpp \
     application.cpp \
     mainwidget.cpp \
     menuwidget.cpp \
     messagehandler.cpp \
     messagehandlerwidget.cpp \
+    resultwidget.cpp \
     tcpclient.cpp
 
 HEADERS += \
     application.h \
     findopponentmenuwidget.h \
     findopponentwidget.h \
+    gamefieldwidget.h \
+    gameinfowidget.h \
+    gameresultwidget.h \
+    gamewidget.h \
+    goldboxwidget.h \
     mainwidget.h \
     menuwidget.h \
     messagehandler.h \
     messagehandlerwidget.h \
+    resultwidget.h \
     tcpclient.h
 
 # Default rules for deployment.

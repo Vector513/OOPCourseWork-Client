@@ -57,11 +57,21 @@ MessageHandlerWidget* MessageHandler::selectWidgetBasedOnData(QByteArray& data)
 void MessageHandler::processData(QByteArray& data)
 {
     qDebug() << "Обработка данных: " << data;
-    if (!data.isEmpty()) {
-        MessageHandlerWidget* widget = selectWidgetBasedOnData(data);
 
-        if (widget) {
-            emit widget->onDataReceived(data);
+    // Разделяем данные по разделителю ";"
+    QList<QByteArray> messages = data.split(';');
+
+    for (QByteArray& message : messages) {
+        // Убираем возможный пробел в конце каждого сообщения, если он есть
+        message = message.trimmed();
+
+        if (!message.isEmpty()) {
+            // Обрабатываем каждое сообщение
+            MessageHandlerWidget* widget = selectWidgetBasedOnData(message);
+            if (widget) {
+                widget->onDataReceived(message);
+            }
         }
     }
 }
+

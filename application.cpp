@@ -14,9 +14,13 @@ Application::Application(MessageHandler* messageHandler, QWidget *parent)
     stackedWidget = new QStackedWidget;
     mainWidget = new MainWidget(messageHandler, this);
     findOpponentWidget = new FindOpponentWidget(messageHandler, this);
+    gameWidget = new GameWidget(messageHandler, this);
+    resultWidget = new ResultWidget(messageHandler, this);
 
     stackedWidget->addWidget(mainWidget);
     stackedWidget->addWidget(findOpponentWidget);
+    stackedWidget->addWidget(gameWidget);
+    stackedWidget->addWidget(resultWidget);
     stackedWidget->setCurrentWidget(mainWidget);
 
     QVBoxLayout* layout = new QVBoxLayout(this); // Компоновка для родителя
@@ -27,7 +31,9 @@ Application::Application(MessageHandler* messageHandler, QWidget *parent)
     setLayout(layout);
 
     connect(mainWidget, &MainWidget::exited, this, &Application::onExited);
-    connect(findOpponentWidget, &FindOpponentWidget::disconnected, this, &Application::onDisconnected);
+    connect(findOpponentWidget, &FindOpponentWidget::disconnected, this, &Application::onReturnToMainMenu);
+    connect(gameWidget, &GameWidget::disconnected, this, &Application::onReturnToMainMenu);
+    connect(resultWidget, &ResultWidget::exited, this, &Application::onReturnToMainMenu);
 }
 
 Application::~Application()
@@ -57,7 +63,7 @@ void Application::onExited()
     QApplication::quit();
 }
 
-void Application::onDisconnected()
+void Application::onReturnToMainMenu()
 {
     stackedWidget->setCurrentWidget(mainWidget);
     mainWidget->start();
@@ -66,18 +72,25 @@ void Application::onDisconnected()
 
 void Application::processData(QByteArray& data)
 {
-    // Преобразуем QByteArray в QString
     QString strData = QString::fromUtf8(data);
 
-    // Разделяем строку на слова по пробелам (или другим разделителям, если нужно)
+    qDebug() << "Mne prishlo: " << strData;
+
     QStringList words = strData.split(" ");
 
     if (!words.isEmpty() && words.first() == "FindOpponentWidget") {
         findOpponentWidget->start();
         stackedWidget->setCurrentWidget(findOpponentWidget);
         mainWidget->resetState();
-    } else {
-
+    } else if (!words.isEmpty() && words.first() == "OpponentFound") {
+        gameWidget->start();
+        stackedWidget->setCurrentWidget(gameWidget);
+        findOpponentWidget->resetState();
+    } else if (!words.isEmpty() && words.first() == "GameOver") {
+        qDebug() << "Я здессссссссссссссссссссссссссссссс";
+        resultWidget->start();
+        stackedWidget->setCurrentWidget(resultWidget);
+        gameWidget->resetState();
     }
 }
 

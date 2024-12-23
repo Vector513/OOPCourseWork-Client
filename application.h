@@ -4,6 +4,8 @@
 #include "MessageHandlerWidget.h"
 #include "MainWidget.h"
 #include "FindOpponentWidget.h"
+#include "GameWidget.h"
+#include "ResultWidget.h"
 #include <QStackedWidget>
 
 class Application : public MessageHandlerWidget
@@ -22,12 +24,14 @@ protected:
 
 private slots:
     void onExited();
-    void onDisconnected();
+    void onReturnToMainMenu();
 
 private:
     QStackedWidget* stackedWidget;
     MainWidget* mainWidget;
     FindOpponentWidget* findOpponentWidget;
+    GameWidget* gameWidget;
+    ResultWidget* resultWidget;
 
     void processData(QByteArray& data) override;
 };
