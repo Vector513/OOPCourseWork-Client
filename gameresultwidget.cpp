@@ -34,18 +34,16 @@ void GameResultWidget::resetState()
 
 void GameResultWidget::start()
 {
-    // Старт игры, если нужно
+    return;
 }
 
 void GameResultWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
 
-    // Рисуем фон
-    painter.setBrush(QColor(0, 0, 0, 100));  // Полупрозрачный черный фон
-    painter.drawRect(this->rect());  // Покрыть весь виджет
+    painter.setBrush(QColor(0, 0, 0, 100));
+    painter.drawRect(this->rect());
 
-    // Отображаем текст
     QWidget::paintEvent(event);
 }
 
@@ -54,10 +52,9 @@ void GameResultWidget::resizeEvent(QResizeEvent* event)
     int width = this->width();
     int height = this->height();
 
-    // Располагаем лейблы
-    statusLabel->setGeometry(0, height / 4, width, 40);  // Пример: в верхней части
-    infoLabel->setGeometry(0, height / 2, width, 40);  // Пример: в центре
-    timePassedLabel->setGeometry(0, height * 3 / 4, width, 40);  // Пример: внизу
+    statusLabel->setGeometry(0, height / 4, width, 40);
+    infoLabel->setGeometry(0, height / 2, width, 40);
+    timePassedLabel->setGeometry(0, height * 3 / 4, width, 40);
 
     QWidget::resizeEvent(event);
 }

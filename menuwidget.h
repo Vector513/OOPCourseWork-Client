@@ -26,8 +26,8 @@ private slots:
     void onExitButtonClicked();
 
 private:
-    QPushButton* findOpponentButton;  // Кнопка для поиска противника
-    QPushButton* exitButton;          // Кнопка для выхода
+    QPushButton* findOpponentButton;
+    QPushButton* exitButton;
 
     void resizeEvent(QResizeEvent* event) override;
     void processData(QByteArray& data) override;

@@ -1,20 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>background1.jpg</file>
-        <file>background2.jpg</file>
-        <file>background3.jpg</file>
         <file>FindOpponentWidgetBackground.jpg</file>
-        <file>gold.jpg</file>
         <file>goldBoxClosed.jpg</file>
-        <file>goldBoxes.jpg</file>
         <file>goldBoxOpened.jpg</file>
         <file>images.qrc</file>
         <file>MainWidgetBackground.jpg</file>
         <file>GoldBoxClosed.jpg</file>
         <file>GoldBoxLooted.jpg</file>
         <file>GoldBoxOpened.jpg</file>
-        <file>shit.jpg</file>
-        <file>shit2.jpg</file>
         <file>GameWidgetBackground.jpg</file>
     </qresource>
 </RCC>

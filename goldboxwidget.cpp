@@ -6,23 +6,13 @@ GoldBoxWidget::GoldBoxWidget(MessageHandler* messageHandler, int goldBoxIndex, Q
     : MessageHandlerWidget(messageHandler, parent),
     isOpen(false),
     isLooted(false),
-    index(goldBoxIndex), // Инициализация index
+    index(goldBoxIndex),
     goldBoxButton(new QPushButton(this)),
-    goldBoxClosedImage(new QImage(":/GoldBoxClosed.jpg")), // Изображение закрытого сундука
-    goldBoxOpenedImage(new QImage(":/GoldBoxOpened.jpg")), // Изображение открытого сундука
-    goldBoxLootedImage(new QImage(":/GoldBoxLooted.jpg")) // Изображение залутанного сундука
+    goldBoxClosedImage(new QImage(":/GoldBoxClosed.jpg")),
+    goldBoxOpenedImage(new QImage(":/GoldBoxOpened.jpg")),
+    goldBoxLootedImage(new QImage(":/GoldBoxLooted.jpg"))
 {
     messageHandler->addWidget("GoldBox" + QString::number(index), this);
-
-    if (goldBoxClosedImage && !goldBoxClosedImage->isNull()) {
-        for (int y = 0; y < goldBoxClosedImage->height(); ++y) {
-            for (int x = 0; x < goldBoxClosedImage->width(); ++x) {
-                if (goldBoxClosedImage->pixelColor(x, y) == Qt::white) {
-                    goldBoxClosedImage->setPixelColor(x, y, Qt::transparent);
-                }
-            }
-        }
-    }
 
     goldBoxButton->setFlat(true);
     goldBoxButton->setGeometry(this->rect());
@@ -38,6 +28,7 @@ void GoldBoxWidget::resetState()
 
 void GoldBoxWidget::start()
 {
+    resetState();
 }
 
 void GoldBoxWidget::paintEvent(QPaintEvent* event)
@@ -46,17 +37,15 @@ void GoldBoxWidget::paintEvent(QPaintEvent* event)
 
     QImage* currentImage = nullptr;
 
-    // Выбираем изображение в зависимости от состояния
     if (isLooted) {
-        currentImage = goldBoxLootedImage; // Изображение для залутанного сундука
+        currentImage = goldBoxLootedImage;
     } else if (isOpen) {
-        currentImage = goldBoxOpenedImage; // Изображение для открытого сундука
+        currentImage = goldBoxOpenedImage;
     } else {
-        currentImage = goldBoxClosedImage; // Изображение для закрытого сундука
+        currentImage = goldBoxClosedImage;
     }
 
     if (currentImage && !currentImage->isNull()) {
-        // Рисуем спрайт, центрируя его
         QRect targetRect = this->rect();
         QRect sourceRect(0, 0, currentImage->width(), currentImage->height());
         painter.drawImage(targetRect, *currentImage, sourceRect);

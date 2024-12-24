@@ -44,26 +44,19 @@ void MenuWidget::paintEvent(QPaintEvent* event)
     QWidget::paintEvent(event);
 
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);  // Включаем антиалиасинг для сглаживания углов
+    painter.setRenderHint(QPainter::Antialiasing);
 
-    // Устанавливаем прозрачность (например, 50% прозрачности)
     painter.setOpacity(0.5);
 
-    // Вычисляем радиус закругления в зависимости от ширины или высоты виджета
-    int cornerRadius = std::min(width(), height()) / 16;  // Радиус пропорционален меньшему размеру виджета
+    int cornerRadius = std::min(width(), height()) / 16;
 
-    // Создаем путь с закругленными углами
     QPainterPath path;
-    path.addRoundedRect(rect(), cornerRadius, cornerRadius);  // Устанавливаем радиус закругления для всех углов
+    path.addRoundedRect(rect(), cornerRadius, cornerRadius);
 
-    // Заливаем закругленный прямоугольник цветом с прозрачностью
-    painter.fillPath(path, QColor(206, 151, 68));  // Цвет фона
+    painter.fillPath(path, QColor(206, 151, 68));
 
-    // Вставьте дополнительную отрисовку элементов, если необходимо (например, кнопки, текст и т.д.)
-
-    QWidget::paintEvent(event);  // Вызов базового paintEvent
+    QWidget::paintEvent(event);
 }
-
 
 void MenuWidget::resizeEvent(QResizeEvent* event)
 {
@@ -85,19 +78,17 @@ void MenuWidget::resizeEvent(QResizeEvent* event)
     findOpponentButton->setStyleSheet(QString("background-color: #4FB7BD; border-radius: %1px;").arg(borderRadius));
     exitButton->setStyleSheet(QString("background-color: #DB4A4A; border-radius: %1px;").arg(borderRadius));
 
-    int fontSize = buttonHeight / 2;  // Исходный размер шрифта - половина высоты кнопки
+    int fontSize = buttonHeight / 2;
     QFont font = findOpponentButton->font();
     font.setPointSize(fontSize);
 
     QFontMetrics metrics(font);
     int textWidth = metrics.horizontalAdvance(findOpponentButton->text());
 
-    // Если текст занимает более 90% ширины кнопки, уменьшаем размер шрифта
     if (textWidth > buttonWidth * 0.9) {
-        font.setPointSize(buttonWidth * 0.9 / textWidth * fontSize);  // Уменьшаем шрифт пропорционально
+        font.setPointSize(buttonWidth * 0.9 / textWidth * fontSize);
     }
 
-    // Применяем одинаковый размер шрифта к обеим кнопкам
     findOpponentButton->setFont(font);
     exitButton->setFont(font);
 

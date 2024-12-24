@@ -5,7 +5,7 @@
 #include <QPainter>
 
 Application::Application(MessageHandler* messageHandler, QWidget *parent)
-    : MessageHandlerWidget(messageHandler, parent)  // Вызов конструктора базового класса
+    : MessageHandlerWidget(messageHandler, parent)
 {
     resize(800, 450);
 
@@ -23,23 +23,26 @@ Application::Application(MessageHandler* messageHandler, QWidget *parent)
     stackedWidget->addWidget(resultWidget);
     stackedWidget->setCurrentWidget(mainWidget);
 
-    QVBoxLayout* layout = new QVBoxLayout(this); // Компоновка для родителя
-    layout->setContentsMargins(0, 0, 0, 0);     // Убираем отступы
-    layout->setSpacing(0);                      // Убираем промежутки
-    layout->addWidget(stackedWidget);              // Добавляем виджет
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(stackedWidget);
 
     setLayout(layout);
 
-    connect(messageHandler, &MessageHandler::disconnected, this, &Application::onReturnToMainMenu);
+    connect(messageHandler, &MessageHandler::disconnected, this, &Application::onDisconnected);
     connect(mainWidget, &MainWidget::exited, this, &Application::onExited);
-    connect(findOpponentWidget, &FindOpponentWidget::disconnected, this, &Application::onReturnToMainMenu);
-    connect(gameWidget, &GameWidget::disconnected, this, &Application::onReturnToMainMenu);
+    connect(findOpponentWidget, &FindOpponentWidget::disconnected, this, &Application::onDisconnected);
+    connect(gameWidget, &GameWidget::disconnected, this, &Application::onDisconnected);
     connect(resultWidget, &ResultWidget::exited, this, &Application::onReturnToMainMenu);
 }
 
 Application::~Application()
 {
     delete mainWidget;
+    delete findOpponentWidget;
+    delete gameWidget;
+    delete resultWidget;
 }
 
 void Application::resetState() {
@@ -64,21 +67,24 @@ void Application::onExited()
     QApplication::quit();
 }
 
-void Application::onReturnToMainMenu()
+void Application::onDisconnected()
 {
     if (stackedWidget->currentWidget() != resultWidget) {
-        stackedWidget->setCurrentWidget(mainWidget);
-        mainWidget->start();
-        findOpponentWidget->resetState();
+        onReturnToMainMenu();
     }
+    gameWidget->resetState();
+}
+
+void Application::onReturnToMainMenu()
+{
+    stackedWidget->setCurrentWidget(mainWidget);
+    mainWidget->start();
+    findOpponentWidget->resetState();
 }
 
 void Application::processData(QByteArray& data)
 {
     QString strData = QString::fromUtf8(data);
-
-    qDebug() << "Mne prishlo: " << strData;
-
     QStringList words = strData.split(" ");
 
     if (!words.isEmpty() && words.first() == "FindOpponentWidget") {
@@ -89,7 +95,7 @@ void Application::processData(QByteArray& data)
         gameWidget->start();
         stackedWidget->setCurrentWidget(gameWidget);
         findOpponentWidget->resetState();
-    } else if (!words.isEmpty() && words.first() == "GameResultWidget") {
+    } else if (!words.isEmpty() && words.first() == "ResultWidget") {
         resultWidget->start();
         stackedWidget->setCurrentWidget(resultWidget);
         gameWidget->resetState();

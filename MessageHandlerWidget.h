@@ -1,8 +1,6 @@
 #ifndef MESSAGEHANDLERWIDGET_H
 #define MESSAGEHANDLERWIDGET_H
 
-//#include "MessageHandler.h"
-
 #include <QWidget>
 
 class MessageHandler;

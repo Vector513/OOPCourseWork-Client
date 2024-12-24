@@ -16,8 +16,8 @@ FindOpponentWidget::FindOpponentWidget(MessageHandler* messageHandler, QWidget* 
     windowTitleLabel->setAlignment(Qt::AlignCenter);
     windowTitleLabel->setStyleSheet(
         "background-color: #7AE176; "
-        "border-radius: 15px; "  // Закругленные углы
-        "border: 3px solid #5A8D3C;"  // Рамка
+        "border-radius: 15px; "
+        "border: 3px solid #5A8D3C;"
         );
     onlinePlayersLabel->setAlignment(Qt::AlignCenter);
     onlinePlayersLabel->setStyleSheet("background-color: #F6ED66; font-style: italic;");
@@ -56,59 +56,48 @@ void FindOpponentWidget::resizeEvent(QResizeEvent* event)
     int windowWidth = width();
     int windowHeight = height();
 
-    // Размеры и позиция menuWidget
     int menuWidth = windowWidth * 600 / 1440;
     int menuHeight = windowHeight * 400 / 1024;
     int menuOffsetX = (windowWidth - menuWidth) / 2;
     int menuOffsetY = windowHeight * 300 / 1024;
     menuWidget->setGeometry(menuOffsetX, menuOffsetY, menuWidth, menuHeight);
 
-    // Размеры и позиция windowTitleLabel
     int titleWidth = windowWidth * 800 / 1440;
     int titleHeight = windowHeight * 130 / 1024;
     int titleOffsetX = (windowWidth - titleWidth) / 2;
     int titleOffsetY = windowHeight * 60 / 1024;
     windowTitleLabel->setGeometry(titleOffsetX, titleOffsetY, titleWidth, titleHeight);
 
-    // Расчет начального размера шрифта
-    int fontSize = titleHeight / 2;  // Исходный размер шрифта — половина высоты
+    int fontSize = titleHeight / 2;
     QFont titleFont = windowTitleLabel->font();
     titleFont.setPointSize(fontSize);
 
-    // Проверка текста на выход за границы
     QFontMetrics metrics(titleFont);
     int textWidth = metrics.horizontalAdvance(windowTitleLabel->text());
 
-    // Если текст шире 90% ширины лейбла, уменьшаем шрифт
     if (textWidth > titleWidth * 0.9) {
-        titleFont.setPointSize(titleWidth * 0.9 / textWidth * fontSize);  // Пропорциональное уменьшение шрифта
+        titleFont.setPointSize(titleWidth * 0.9 / textWidth * fontSize);
     }
-    // Установка финального шрифта
     windowTitleLabel->setFont(titleFont);
 
-    // Расчет размеров и положения onlinePlayersLabel
-    int onlineLabelWidth = windowWidth * 3 / 14;  // 3/14 от ширины
-    int onlineLabelHeight = windowHeight / 10;    // 1/10 от высоты
-    int onlineLabelOffsetX = windowWidth * 20 / 1440;  // 20/1440 от ширины
-    int onlineLabelOffsetY = windowHeight - windowHeight * 20 / 1024 - onlineLabelHeight; // 20/1024 от высоты
+    int onlineLabelWidth = windowWidth * 3 / 14;
+    int onlineLabelHeight = windowHeight / 10;
+    int onlineLabelOffsetX = windowWidth * 20 / 1440;
+    int onlineLabelOffsetY = windowHeight - windowHeight * 20 / 1024 - onlineLabelHeight;
 
     onlinePlayersLabel->setGeometry(onlineLabelOffsetX, onlineLabelOffsetY, onlineLabelWidth, onlineLabelHeight);
 
-    // Расчет начального размера шрифта для onlinePlayersLabel
-    int fontSizeOnline = onlineLabelHeight / 2;  // Исходный размер шрифта — половина высоты
+    int fontSizeOnline = onlineLabelHeight / 2;
     QFont onlineFont = onlinePlayersLabel->font();
     onlineFont.setPointSize(fontSizeOnline);
 
-    // Проверка текста на выход за границы
     QFontMetrics metricsOnline(onlineFont);
     int textWidthOnline = metricsOnline.horizontalAdvance(onlinePlayersLabel->text());
 
-    // Если текст шире 90% ширины лейбла, уменьшаем шрифт
     if (textWidthOnline > onlineLabelWidth * 0.9) {
-        onlineFont.setPointSize(onlineLabelWidth * 0.9 / textWidthOnline * fontSizeOnline);  // Пропорциональное уменьшение шрифта
+        onlineFont.setPointSize(onlineLabelWidth * 0.9 / textWidthOnline * fontSizeOnline);
     }
 
-    // Установка финального шрифта
     onlinePlayersLabel->setFont(onlineFont);
 
     QWidget::resizeEvent(event);
@@ -118,10 +107,11 @@ void FindOpponentWidget::resizeEvent(QResizeEvent* event)
 void FindOpponentWidget::processData(QByteArray& data)
 {
     QString message(data);
+    QStringList parts = message.split(' ');
 
-    if (message.startsWith("OnlinePlayers")) {
+    if (parts.size() > 1 && parts[0] == "OnlinePlayers") {
         bool ok;
-        int count = message.mid(14).toInt(&ok);
+        int count = parts[1].toInt(&ok);
         if (ok) {
             onlinePlayers = count;
             onlinePlayersLabel->setText(QString("Игроков онлайн: %1").arg(onlinePlayers));
@@ -132,3 +122,4 @@ void FindOpponentWidget::processData(QByteArray& data)
         qDebug() << "Неизвестное сообщение: " << message;
     }
 }
+

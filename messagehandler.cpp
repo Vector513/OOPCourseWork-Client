@@ -58,15 +58,12 @@ void MessageHandler::processData(QByteArray& data)
 {
     qDebug() << "Обработка данных: " << data;
 
-    // Разделяем данные по разделителю ";"
     QList<QByteArray> messages = data.split(';');
 
     for (QByteArray& message : messages) {
-        // Убираем возможный пробел в конце каждого сообщения, если он есть
         message = message.trimmed();
 
         if (!message.isEmpty()) {
-            // Обрабатываем каждое сообщение
             MessageHandlerWidget* widget = selectWidgetBasedOnData(message);
             if (widget) {
                 widget->onDataReceived(message);
