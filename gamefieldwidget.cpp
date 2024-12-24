@@ -7,14 +7,12 @@ GameFieldWidget::GameFieldWidget(MessageHandler* messageHandler, QWidget* parent
 {
     messageHandler->addWidget("GameField", this);
 
-    setAttribute(Qt::WA_TranslucentBackground);
-    setWindowOpacity(0.5);
-
     for (int i = 0; i < 15; ++i) {
         auto* goldBox = new GoldBoxWidget(messageHandler, i, this);
         goldBoxWidgets.append(goldBox);
     }
 }
+
 void GameFieldWidget::resetState()
 {
     for (auto* box : goldBoxWidgets) {
@@ -28,15 +26,16 @@ void GameFieldWidget::start()
         box->start();
     }
 }
+
 void GameFieldWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
 
-    // Рисуем полупрозрачный фон
-    QColor backgroundColor = Qt::darkGreen;
-    backgroundColor.setAlpha(128); // 50% прозрачности
-    painter.fillRect(this->rect(), backgroundColor);
+    // Рисуем фон
+    painter.setBrush(QColor(0, 0, 0, 100));  // Полупрозрачный черный фон
+    painter.drawRect(this->rect());  // Покрыть весь виджет
 
+    // Отображаем текст
     QWidget::paintEvent(event);
 }
 
@@ -71,5 +70,5 @@ void GameFieldWidget::resizeEvent(QResizeEvent* event)
 
 void GameFieldWidget::processData(QByteArray& data)
 {
-
+    return;
 }

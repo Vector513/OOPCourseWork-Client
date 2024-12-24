@@ -24,9 +24,6 @@ protected:
 signals:
     void exited();
 
-private slots:
-    void onExitClicked();
-
 private:
     GameResultWidget* gameResultWidget;
     QLabel* windowTitleLabel;

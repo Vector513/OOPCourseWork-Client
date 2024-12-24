@@ -24,6 +24,7 @@ protected:
 
 private slots:
     void onExited();
+    void onDisconnected();
     void onReturnToMainMenu();
 
 private:

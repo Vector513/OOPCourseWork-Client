@@ -14,21 +14,17 @@ GameInfoWidget::GameInfoWidget(MessageHandler* messageHandler, QWidget* parent)
 {
     messageHandler->addWidget("GameInfoWidget", this);
 
-    QList<QLabel*> labels = {widgetTitle, coinsLabel, movesLeftForYouLabel,
-                              movesLeftForOpponentLabel, isOpponentLootedLabel,
-                              canMakeMoveLabel};
+    widgetTitle->setAlignment(Qt::AlignCenter);
+    isOpponentLootedLabel->setAlignment(Qt::AlignCenter);
+    canMakeMoveLabel->setAlignment(Qt::AlignCenter);
 
-    for (auto* label : labels) {
-        label->setAlignment(Qt::AlignCenter);
-        label->setStyleSheet("font-size: 14px; color: white; background-color: rgba(0, 0, 0, 0.6); border: 1px solid white; padding: 4px;");
-    }
-
-    widgetTitle->setStyleSheet("font-size: 16px; font-weight: bold; color: yellow; background-color: rgba(0, 0, 0, 0.8); border: 1px solid yellow; padding: 6px;");
+    // Установка фона
+    isOpponentLootedLabel->setStyleSheet("background-color: #76ED6E;"); // Зеленый фон
+    canMakeMoveLabel->setStyleSheet("background-color: #EB4848;");     // Красный фон
 }
 
 void GameInfoWidget::resetState()
 {
-    // Сбрасываем значения лейблов
     coinsLabel->setText("В ящике: ? монет");
     movesLeftForYouLabel->setText("Ходов у вас осталось: ?");
     movesLeftForOpponentLabel->setText("Ходов у соперника осталось: ?");
@@ -38,35 +34,97 @@ void GameInfoWidget::resetState()
 
 void GameInfoWidget::start()
 {
-    // Начальное состояние игры может быть установлено здесь
+    resetState();
 }
 
 void GameInfoWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
 
-    // Полупрозрачный фон
-    QColor backgroundColor = Qt::darkBlue;
-    backgroundColor.setAlpha(200);
-    painter.fillRect(this->rect(), backgroundColor);
+    // Рисуем фон
+    painter.setBrush(QColor(215, 200, 13, 50));  // Полупрозрачный черный фон
+    painter.drawRect(this->rect());  // Покрыть весь виджет
 
+    // Отображаем текст
     QWidget::paintEvent(event);
+}
+
+void setFontSizeToFitLabel(QLabel* label, int labelWidth, int labelHeight) {
+    int fontSize = labelHeight / 2; // Исходный размер шрифта — половина высоты
+    QFont font = label->font();
+    font.setPointSize(fontSize);
+
+    // Проверка текста на выход за границы
+    QFontMetrics metrics(font);
+    int textWidth = metrics.horizontalAdvance(label->text());
+
+    // Если текст шире 90% ширины лейбла, уменьшаем шрифт
+    if (textWidth > labelWidth * 0.9) {
+        font.setPointSize(labelWidth * 0.9 / textWidth * fontSize); // Пропорциональное уменьшение шрифта
+    }
+
+    // Установка финального шрифта
+    label->setFont(font);
 }
 
 void GameInfoWidget::resizeEvent(QResizeEvent* event)
 {
-    // Обновляем геометрию элементов при изменении размера
-    int width = this->width();
-    int height = this->height();
+    int windowWidth = width();
+    int windowHeight = height();
 
-    int labelHeight = height / 6;
+    int widgetTitleWidth = windowWidth * 360 / 400;    // Ширина как 360 к 400
+    int widgetTitleHeight = windowHeight * 85 / 600;  // Высота как 85 к 600
+    int widgetTitleOffsetX = windowWidth * 20 / 400;  // Отступ от левой границы как 20 к 400
+    int widgetTitleOffsetY = windowHeight * 20 / 600; // Отступ от верхней границы как 20 к 600
 
-    widgetTitle->setGeometry(0, 0, width, labelHeight);
-    coinsLabel->setGeometry(0, labelHeight, width, labelHeight);
-    movesLeftForYouLabel->setGeometry(0, 2 * labelHeight, width, labelHeight);
-    movesLeftForOpponentLabel->setGeometry(0, 3 * labelHeight, width, labelHeight);
-    isOpponentLootedLabel->setGeometry(0, 4 * labelHeight, width, labelHeight);
-    canMakeMoveLabel->setGeometry(0, 5 * labelHeight, width, labelHeight);
+    widgetTitle->setGeometry(widgetTitleOffsetX, widgetTitleOffsetY, widgetTitleWidth, widgetTitleHeight);
+
+    int coinsLabelWidth = windowWidth * 360 / 400;    // Ширина как 360 к 400
+    int coinsLabelHeight = windowHeight * 85 / 600;  // Высота как 85 к 600
+    int coinsLabelOffsetX = windowWidth * 20 / 400;  // Отступ от левой границы как 20 к 400
+    int coinsLabelOffsetY = windowHeight * 75 / 600; // Отступ от верхней границы как 75 к 600
+
+    coinsLabel->setGeometry(coinsLabelOffsetX, coinsLabelOffsetY, coinsLabelWidth, coinsLabelHeight);
+
+    // Настройка movesLeftForYouLabel
+    int movesLeftForYouLabelWidth = windowWidth * 360 / 400;    // Ширина как 360 к 400
+    int movesLeftForYouLabelHeight = windowHeight * 85 / 600;  // Высота как 85 к 600
+    int movesLeftForYouLabelOffsetX = windowWidth * 20 / 400;  // Отступ от левой границы как 20 к 400
+    int movesLeftForYouLabelOffsetY = windowHeight * 130 / 600; // Отступ от верхней границы как 130 к 600
+
+    movesLeftForYouLabel->setGeometry(movesLeftForYouLabelOffsetX, movesLeftForYouLabelOffsetY, movesLeftForYouLabelWidth, movesLeftForYouLabelHeight);
+
+    // Настройка movesLeftForOpponentLabel
+    int movesLeftForOpponentLabelWidth = windowWidth * 360 / 400;    // Ширина как 360 к 400
+    int movesLeftForOpponentLabelHeight = windowHeight * 85 / 600;  // Высота как 85 к 600
+    int movesLeftForOpponentLabelOffsetX = windowWidth * 20 / 400;  // Отступ от левой границы как 20 к 400
+    int movesLeftForOpponentLabelOffsetY = windowHeight * 195 / 600; // Отступ от верхней границы как 195 к 600
+
+    movesLeftForOpponentLabel->setGeometry(movesLeftForOpponentLabelOffsetX, movesLeftForOpponentLabelOffsetY, movesLeftForOpponentLabelWidth, movesLeftForOpponentLabelHeight);
+
+    // Настройка isOpponentLootedLabel
+    int isOpponentLootedLabelWidth = windowWidth * 340 / 400;    // Ширина как 340 к 400
+    int isOpponentLootedLabelHeight = windowHeight * 140 / 600; // Высота как 140 к 600
+    int isOpponentLootedLabelOffsetX = windowWidth * 30 / 400;  // Отступ от левой границы как 30 к 400
+    int isOpponentLootedLabelOffsetY = windowHeight * 255 / 600; // Отступ от верхней границы как 255 к 600
+
+    isOpponentLootedLabel->setGeometry(isOpponentLootedLabelOffsetX, isOpponentLootedLabelOffsetY, isOpponentLootedLabelWidth, isOpponentLootedLabelHeight);
+
+
+    // Настройка canMakeMoveLabel
+    int canMakeMoveLabelWidth = windowWidth * 340 / 400;    // Ширина как 340 к 400
+    int canMakeMoveLabelHeight = windowHeight * 140 / 600; // Высота как 140 к 600
+    int canMakeMoveLabelOffsetX = windowWidth * 30 / 400;  // Отступ от левой границы как 30 к 400
+    int canMakeMoveLabelOffsetY = windowHeight * 420 / 600; // Отступ от верхней границы как 420 к 600
+
+    canMakeMoveLabel->setGeometry(canMakeMoveLabelOffsetX, canMakeMoveLabelOffsetY, canMakeMoveLabelWidth, canMakeMoveLabelHeight);
+
+    setFontSizeToFitLabel(widgetTitle, widgetTitleWidth, widgetTitleHeight);
+    setFontSizeToFitLabel(coinsLabel, coinsLabelWidth, coinsLabelHeight);
+    setFontSizeToFitLabel(movesLeftForYouLabel, movesLeftForYouLabelWidth, movesLeftForYouLabelHeight);
+    setFontSizeToFitLabel(movesLeftForOpponentLabel, movesLeftForOpponentLabelWidth, movesLeftForOpponentLabelHeight);
+    setFontSizeToFitLabel(canMakeMoveLabel, canMakeMoveLabelWidth, canMakeMoveLabelHeight);
+    setFontSizeToFitLabel(isOpponentLootedLabel, isOpponentLootedLabelWidth, isOpponentLootedLabelHeight);
 
     QWidget::resizeEvent(event);
 }
@@ -89,13 +147,16 @@ void GameInfoWidget::processData(QByteArray& data)
         }
     } else if (command == "OpponentLooted") {
         isOpponentLootedLabel->setText("Соперник забрал золото!");
+        isOpponentLootedLabel->setStyleSheet("background-color: #EB4848;");
     } else if (command == "YourTurn") {
         canMakeMoveLabel->setText("Ходите");
+        canMakeMoveLabel->setStyleSheet("background-color: #76ED6E");
     } else if (command == "Wait") {
         canMakeMoveLabel->setText("Ждите");
+        canMakeMoveLabel->setStyleSheet("background-color: #EB4848");
     } else if (command == "MovesLeftForYou") {
         movesLeftForYouLabel->setText("Ходов у вас осталось: " + value);
     } else if (command == "MovesLeftForOpponent") {
-        movesLeftForYouLabel->setText("Ходов у вас осталось: " + value);
+        movesLeftForOpponentLabel->setText("Ходов у соперника осталось: " + value);
     }
 }

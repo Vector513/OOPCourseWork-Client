@@ -19,7 +19,6 @@ MainWidget::MainWidget(MessageHandler* messageHandler, QWidget *parent)
         "border-radius: 15px; "  // Закругленные углы
         "border: 3px solid #5A8D3C;"  // Рамка
         );
-    //windowTitleLabel->setWordWrap(true);
 
     connect(menuWidget, &MenuWidget::exited, this, &MainWidget::exited);
 }
@@ -80,7 +79,5 @@ void MainWidget::resizeEvent(QResizeEvent* event)
 
     QWidget::resizeEvent(event);
 }
-
-
 
 void MainWidget::processData(QByteArray& data) {}

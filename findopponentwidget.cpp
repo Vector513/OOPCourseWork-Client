@@ -118,10 +118,11 @@ void FindOpponentWidget::resizeEvent(QResizeEvent* event)
 void FindOpponentWidget::processData(QByteArray& data)
 {
     QString message(data);
+    QStringList parts = message.split(' ');
 
-    if (message.startsWith("OnlinePlayers")) {
+    if (parts.size() > 1 && parts[0] == "OnlinePlayers") {
         bool ok;
-        int count = message.mid(14).toInt(&ok);
+        int count = parts[1].toInt(&ok);
         if (ok) {
             onlinePlayers = count;
             onlinePlayersLabel->setText(QString("Игроков онлайн: %1").arg(onlinePlayers));
@@ -132,3 +133,4 @@ void FindOpponentWidget::processData(QByteArray& data)
         qDebug() << "Неизвестное сообщение: " << message;
     }
 }
+

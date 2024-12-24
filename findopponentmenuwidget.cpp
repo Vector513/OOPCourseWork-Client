@@ -11,11 +11,6 @@ FindOpponentMenuWidget::FindOpponentMenuWidget(MessageHandler* messageHandler, Q
 {
     messageHandler->addWidget("FindOpponentMenuWidget", this);
 
-    setAutoFillBackground(true);
-    QPalette palette = this->palette();
-    palette.setColor(QPalette::Window, QColor(206, 151, 68));
-    setPalette(palette);
-
     cancelSearchButton = new QPushButton("Отменить поиск", this);
     cancelSearchButton->setStyleSheet("background-color: #F08E38; border-radius: 10px;");
 
@@ -55,7 +50,8 @@ void FindOpponentMenuWidget::paintEvent(QPaintEvent* event)
     QPainterPath path;
     path.addRoundedRect(rect(), cornerRadius, cornerRadius);
 
-    painter.fillPath(path, QColor(206, 151, 68));  // Цвет фона
+    painter.setBrush(QColor(191, 150, 88, 100));  // Полупрозрачный черный фон
+    painter.drawRect(this->rect());  // Покрыть весь виджет
 
     QWidget::paintEvent(event);
 }

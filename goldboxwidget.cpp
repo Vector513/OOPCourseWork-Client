@@ -38,6 +38,7 @@ void GoldBoxWidget::resetState()
 
 void GoldBoxWidget::start()
 {
+    resetState();
 }
 
 void GoldBoxWidget::paintEvent(QPaintEvent* event)
