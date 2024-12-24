@@ -93,6 +93,9 @@ void GameInfoWidget::processData(QByteArray& data)
         canMakeMoveLabel->setText("Ходите");
     } else if (command == "Wait") {
         canMakeMoveLabel->setText("Ждите");
+    } else if (command == "MovesLeftForYou") {
+        movesLeftForYouLabel->setText("Ходов у вас осталось: " + value);
+    } else if (command == "MovesLeftForOpponent") {
+        movesLeftForYouLabel->setText("Ходов у вас осталось: " + value);
     }
 }
-

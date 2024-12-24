@@ -30,6 +30,7 @@ Application::Application(MessageHandler* messageHandler, QWidget *parent)
 
     setLayout(layout);
 
+    connect(messageHandler, &MessageHandler::disconnected, this, &Application::onReturnToMainMenu);
     connect(mainWidget, &MainWidget::exited, this, &Application::onExited);
     connect(findOpponentWidget, &FindOpponentWidget::disconnected, this, &Application::onReturnToMainMenu);
     connect(gameWidget, &GameWidget::disconnected, this, &Application::onReturnToMainMenu);
@@ -65,9 +66,11 @@ void Application::onExited()
 
 void Application::onReturnToMainMenu()
 {
-    stackedWidget->setCurrentWidget(mainWidget);
-    mainWidget->start();
-    findOpponentWidget->resetState();
+    if (stackedWidget->currentWidget() != resultWidget) {
+        stackedWidget->setCurrentWidget(mainWidget);
+        mainWidget->start();
+        findOpponentWidget->resetState();
+    }
 }
 
 void Application::processData(QByteArray& data)
@@ -86,8 +89,7 @@ void Application::processData(QByteArray& data)
         gameWidget->start();
         stackedWidget->setCurrentWidget(gameWidget);
         findOpponentWidget->resetState();
-    } else if (!words.isEmpty() && words.first() == "GameOver") {
-        qDebug() << "Я здессссссссссссссссссссссссссссссс";
+    } else if (!words.isEmpty() && words.first() == "GameResultWidget") {
         resultWidget->start();
         stackedWidget->setCurrentWidget(resultWidget);
         gameWidget->resetState();

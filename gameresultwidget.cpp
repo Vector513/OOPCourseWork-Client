@@ -64,70 +64,37 @@ void GameResultWidget::resizeEvent(QResizeEvent* event)
 
 void GameResultWidget::processData(QByteArray& data)
 {
-    qDebug() << "Мы в виджеет: " << data;
+    QList<QByteArray> parts = data.split(' ');
 
-    if (data.startsWith("Winner")) {
-        // Строка "Winner 2 3 40" или "Winner Disconnected 2 23" - разбиение на части
-        QList<QByteArray> parts = data.split(' ');
-
-        if (parts.size() == 5) {
-            // Обычный случай с победой
-            int playerCoins = parts[1].toInt();  // Количество монет игрока
-            int opponentCoins = parts[2].toInt(); // Количество монет соперника
-            int minutes = parts[3].toInt();       // Минуты
-            int seconds = parts[4].toInt();       // Секунды
-
-            // Обновляем статус победы
-            statusLabel->setText("Победа!");
-
-            // Обновляем текст для информации о монетах
-            int coinDifference = playerCoins - opponentCoins;
-            infoLabel->setText(QString("Вы набрали на %1 монеты больше чем соперник").arg(coinDifference));
-
-            // Обновляем текст для времени игры
-            timePassedLabel->setText(QString("Партия заняла %1м %2с").arg(minutes).arg(seconds));
-        }
-        else if (parts.size() == 4 && parts[1] == "Disconnected") {
-            // Особый случай: соперник отключился
+    if (parts[0] == "Winner") {
+        if (parts[1] == "Disconnected") {
             statusLabel->setText("Победа!");
             infoLabel->setText("Соперник отключился");
             timePassedLabel->setText(QString("Партия заняла %1м %2с").arg(parts[2].toInt()).arg(parts[3].toInt()));
         }
+        else {
+            int coinDifference = parts[1].toInt();
+            int minutes = parts[2].toInt();
+            int seconds = parts[3].toInt();
+
+            statusLabel->setText("Победа!");
+            infoLabel->setText(QString("Вы набрали на %1 монеты больше чем соперник").arg(coinDifference));
+            timePassedLabel->setText(QString("Партия заняла %1м %2с").arg(minutes).arg(seconds));
+        }
     } else if (data.startsWith("Loser")) {
-        QList<QByteArray> parts = data.split(' ');
+        int coinDifference = parts[1].toInt();
+        int minutes = parts[2].toInt();
+        int seconds = parts[3].toInt();
 
-        // Получаем данные
-        int playerCoins = parts[1].toInt();  // Количество монет игрока
-        int opponentCoins = parts[2].toInt(); // Количество монет соперника
-        int minutes = parts[3].toInt();       // Минуты
-        int seconds = parts[4].toInt();       // Секунды
-
-        // Обновляем статус поражения
         statusLabel->setText("Поражение!");
-
-        // Обновляем текст для информации о монетах
-        int coinDifference = playerCoins - opponentCoins;
         infoLabel->setText(QString("Вы набрали на %1 монеты меньше чем соперник").arg(coinDifference));
-
-        // Обновляем текст для времени игры
         timePassedLabel->setText(QString("Партия заняла %1м %2с").arg(minutes).arg(seconds));
     } else if (data.startsWith("Draw")) {
-        QList<QByteArray> parts = data.split(' ');
+        int minutes = parts[1].toInt();
+        int seconds = parts[2].toInt();
 
-        // Получаем данные
-        int playerCoins = parts[1].toInt();  // Количество монет игрока
-        int opponentCoins = parts[2].toInt(); // Количество монет соперника
-        int minutes = parts[3].toInt();       // Минуты
-        int seconds = parts[4].toInt();       // Секунды
-
-        // Обновляем статус ничьей
         statusLabel->setText("Ничья!");
-
-        // Обновляем текст для информации о монетах
-        int coinDifference = playerCoins - opponentCoins;
-        infoLabel->setText(QString("Соперник также набрал %1 монет").arg(coinDifference));
-
-        // Обновляем текст для времени игры
+        infoLabel->setText("Соперник набрал такое же количество монет");
         timePassedLabel->setText(QString("Партия заняла %1м %2с").arg(minutes).arg(seconds));
     }
 }
