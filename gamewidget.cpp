@@ -63,11 +63,8 @@ void GameWidget::resetState()
 
 void GameWidget::start()
 {
-<<<<<<< HEAD
     elapsedTime = 0;
     timerLabel->setText("00:00");
-=======
->>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
     gameFieldWidget->start();
     gameInfoWidget->start();
 }
@@ -106,16 +103,11 @@ void GameWidget::resizeEvent(QResizeEvent* event)
     int windowWidth = width();
     int windowHeight = height();
 
-<<<<<<< HEAD
-=======
-    // Заголовок окна
->>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
     int windowTitleWidth = windowWidth * 800 / 1440;
     int windowTitleHeight = windowHeight * 130 / 1024;
     int titleOffsetX = (windowWidth - windowTitleWidth) / 2;
     int titleOffsetY = windowHeight * 60 / 1024;
     windowTitleLabel->setGeometry(titleOffsetX, titleOffsetY, windowTitleWidth, windowTitleHeight);
-<<<<<<< HEAD
 
     int fontSize = windowTitleHeight / 2;
     QFont font = windowTitleLabel->font();
@@ -184,80 +176,6 @@ void GameWidget::resizeEvent(QResizeEvent* event)
     int continueButtonOffsetY = windowHeight * 880 / 1024;
 
     continueButton->setGeometry(continueButtonOffsetX, continueButtonOffsetY, continueButtonWidth, continueButtonHeight);
-=======
-
-    int fontSize = windowTitleHeight / 2;
-    QFont font = windowTitleLabel->font();
-    font.setPointSize(fontSize);
-
-    QFontMetrics metrics(font);
-    int textWidth = metrics.horizontalAdvance(windowTitleLabel->text());
-
-    if (textWidth > windowTitleWidth * 0.9) {
-        font.setPointSize(windowTitleWidth * 0.9 / textWidth * fontSize);
-    }
-
-    windowTitleLabel->setFont(font);
-
-    // Кнопка возврата в главное меню
-    int returnButtonWidth = windowWidth * 250 / 1440;
-    int returnButtonHeight = windowHeight * 100 / 1024;
-    int returnButtonOffsetX = windowWidth * 30 / 1440;
-    int returnButtonOffsetY = windowHeight * 85 / 1024;
-
-    returnToMainMenuButton->setGeometry(returnButtonOffsetX, returnButtonOffsetY, returnButtonWidth, returnButtonHeight);
-
-    // Рассчитываем шрифт для кнопки, чтобы текст не выходил за пределы
-    fontSize = returnButtonHeight / 2;  // Начальный размер шрифта пропорционально высоте кнопки
-    font = returnToMainMenuButton->font();
-    font.setPointSize(fontSize);
-
-    metrics = QFontMetrics(font);
-    textWidth = metrics.horizontalAdvance(returnToMainMenuButton->text());
-
-    if (textWidth > returnButtonWidth * 0.9) {
-        font.setPointSize(returnButtonWidth * 0.9 / textWidth * fontSize);  // Корректировка размера шрифта
-    }
-
-    returnToMainMenuButton->setFont(font);
-
-    int timerLabelWidth = windowWidth * 250 / 1440;    // Ширина как 250 к 1440
-    int timerLabelHeight = windowHeight * 100 / 1024;  // Высота как 100 к 1024
-    int timerLabelOffsetX = windowWidth * 1155 / 1440; // Отступ от левой границы как 1155 к 1440
-    int timerLabelOffsetY = windowHeight * 85 / 1024;  // Отступ от верхней границы как 85 к 1024
-
-    timerLabel->setGeometry(timerLabelOffsetX, timerLabelOffsetY, timerLabelWidth, timerLabelHeight);
-
-    // Настройка gameField
-    int gameFieldWidth = windowWidth * 900 / 1440;
-    int gameFieldHeight = windowHeight * 600 / 1024;
-    int gameFieldOffsetX = windowWidth * 35 / 1440;
-    int gameFieldOffsetY = windowHeight * 250 / 1024;
-
-    gameFieldWidget->setGeometry(gameFieldOffsetX, gameFieldOffsetY, gameFieldWidth, gameFieldHeight);
-
-    int gameInfoWidth = windowWidth * 400 / 1440;    // Ширина как 400 к 1440
-    int gameInfoHeight = windowHeight * 600 / 1024;  // Высота как 600 к 1024
-    int gameInfoOffsetX = windowWidth * 990 / 1440;  // Отступ от левой границы как 990 к 1440
-    int gameInfoOffsetY = windowHeight * 250 / 1024; // Отступ от верхней границы как 250 к 1024
-
-    gameInfoWidget->setGeometry(gameInfoOffsetX, gameInfoOffsetY, gameInfoWidth, gameInfoHeight);
-
-    int finishButtonWidth = windowWidth * 420 / 1440;   // Ширина как 420 к 1440
-    int finishButtonHeight = windowHeight * 75 / 1024;  // Высота как 75 к 1024
-    int finishButtonOffsetX = windowWidth * 35 / 1440;  // Отступ от левой границы как 35 к 1440
-    int finishButtonOffsetY = windowHeight * 880 / 1024; // Отступ от верхней границы как 880 к 1024
-
-    finishButton->setGeometry(finishButtonOffsetX, finishButtonOffsetY, finishButtonWidth, finishButtonHeight);
-
-    int continueButtonWidth = windowWidth * 420 / 1440;   // Ширина как 420 к 1440
-    int continueButtonHeight = windowHeight * 75 / 1024;  // Высота как 75 к 1024
-    int continueButtonOffsetX = windowWidth * 515 / 1440; // Отступ от левой границы как 880 к 1440
-    int continueButtonOffsetY = windowHeight * 880 / 1024; // Отступ от верхней границы как 880 к 1024
-
-    continueButton->setGeometry(continueButtonOffsetX, continueButtonOffsetY, continueButtonWidth, continueButtonHeight);
-
->>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
 
     QWidget::resizeEvent(event);
 }

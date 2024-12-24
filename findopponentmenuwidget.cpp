@@ -48,13 +48,8 @@ void FindOpponentMenuWidget::paintEvent(QPaintEvent* event)
     QPainterPath path;
     path.addRoundedRect(rect(), cornerRadius, cornerRadius);
 
-<<<<<<< HEAD
     painter.setBrush(QColor(191, 150, 88, 100));
     painter.drawRect(this->rect());
-=======
-    painter.setBrush(QColor(191, 150, 88, 100));  // Полупрозрачный черный фон
-    painter.drawRect(this->rect());  // Покрыть весь виджет
->>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
 
     QWidget::paintEvent(event);
 }

@@ -85,6 +85,4 @@ void ResultWidget::resizeEvent(QResizeEvent* event)
 }
 
 void ResultWidget::processData(QByteArray& data)
-{
-
-}
+{}

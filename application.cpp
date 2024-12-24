@@ -82,13 +82,6 @@ void Application::onReturnToMainMenu()
     findOpponentWidget->resetState();
 }
 
-void Application::onReturnToMainMenu()
-{
-    stackedWidget->setCurrentWidget(mainWidget);
-    mainWidget->start();
-    findOpponentWidget->resetState();
-}
-
 void Application::processData(QByteArray& data)
 {
     QString strData = QString::fromUtf8(data);
