@@ -18,8 +18,14 @@ GameInfoWidget::GameInfoWidget(MessageHandler* messageHandler, QWidget* parent)
     isOpponentLootedLabel->setAlignment(Qt::AlignCenter);
     canMakeMoveLabel->setAlignment(Qt::AlignCenter);
 
+<<<<<<< HEAD
     isOpponentLootedLabel->setStyleSheet("background-color: #76ED6E;");
     canMakeMoveLabel->setStyleSheet("background-color: #EB4848;");
+=======
+    // Установка фона
+    isOpponentLootedLabel->setStyleSheet("background-color: #76ED6E;"); // Зеленый фон
+    canMakeMoveLabel->setStyleSheet("background-color: #EB4848;");     // Красный фон
+>>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
 }
 
 void GameInfoWidget::resetState()
@@ -35,20 +41,32 @@ void GameInfoWidget::resetState()
 
 void GameInfoWidget::start()
 {
+<<<<<<< HEAD
     return;
+=======
+    resetState();
+>>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
 }
 
 void GameInfoWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
 
+<<<<<<< HEAD
     painter.setBrush(QColor(215, 200, 13, 50));
     painter.drawRect(this->rect());
+=======
+    // Рисуем фон
+    painter.setBrush(QColor(215, 200, 13, 50));  // Полупрозрачный черный фон
+    painter.drawRect(this->rect());  // Покрыть весь виджет
+>>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
 
+    // Отображаем текст
     QWidget::paintEvent(event);
 }
 
 void setFontSizeToFitLabel(QLabel* label, int labelWidth, int labelHeight) {
+<<<<<<< HEAD
     int fontSize = labelHeight / 2;
     QFont font = label->font();
     font.setPointSize(fontSize);
@@ -60,6 +78,22 @@ void setFontSizeToFitLabel(QLabel* label, int labelWidth, int labelHeight) {
         font.setPointSize(labelWidth * 0.9 / textWidth * fontSize);
     }
 
+=======
+    int fontSize = labelHeight / 2; // Исходный размер шрифта — половина высоты
+    QFont font = label->font();
+    font.setPointSize(fontSize);
+
+    // Проверка текста на выход за границы
+    QFontMetrics metrics(font);
+    int textWidth = metrics.horizontalAdvance(label->text());
+
+    // Если текст шире 90% ширины лейбла, уменьшаем шрифт
+    if (textWidth > labelWidth * 0.9) {
+        font.setPointSize(labelWidth * 0.9 / textWidth * fontSize); // Пропорциональное уменьшение шрифта
+    }
+
+    // Установка финального шрифта
+>>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
     label->setFont(font);
 }
 
@@ -68,6 +102,7 @@ void GameInfoWidget::resizeEvent(QResizeEvent* event)
     int windowWidth = width();
     int windowHeight = height();
 
+<<<<<<< HEAD
     int widgetTitleWidth = windowWidth * 360 / 400;
     int widgetTitleHeight = windowHeight * 85 / 600;
     int widgetTitleOffsetX = windowWidth * 20 / 400;
@@ -107,6 +142,52 @@ void GameInfoWidget::resizeEvent(QResizeEvent* event)
     int canMakeMoveLabelHeight = windowHeight * 140 / 600;
     int canMakeMoveLabelOffsetX = windowWidth * 30 / 400;
     int canMakeMoveLabelOffsetY = windowHeight * 420 / 600;
+=======
+    int widgetTitleWidth = windowWidth * 360 / 400;    // Ширина как 360 к 400
+    int widgetTitleHeight = windowHeight * 85 / 600;  // Высота как 85 к 600
+    int widgetTitleOffsetX = windowWidth * 20 / 400;  // Отступ от левой границы как 20 к 400
+    int widgetTitleOffsetY = windowHeight * 20 / 600; // Отступ от верхней границы как 20 к 600
+
+    widgetTitle->setGeometry(widgetTitleOffsetX, widgetTitleOffsetY, widgetTitleWidth, widgetTitleHeight);
+
+    int coinsLabelWidth = windowWidth * 360 / 400;    // Ширина как 360 к 400
+    int coinsLabelHeight = windowHeight * 85 / 600;  // Высота как 85 к 600
+    int coinsLabelOffsetX = windowWidth * 20 / 400;  // Отступ от левой границы как 20 к 400
+    int coinsLabelOffsetY = windowHeight * 75 / 600; // Отступ от верхней границы как 75 к 600
+
+    coinsLabel->setGeometry(coinsLabelOffsetX, coinsLabelOffsetY, coinsLabelWidth, coinsLabelHeight);
+
+    // Настройка movesLeftForYouLabel
+    int movesLeftForYouLabelWidth = windowWidth * 360 / 400;    // Ширина как 360 к 400
+    int movesLeftForYouLabelHeight = windowHeight * 85 / 600;  // Высота как 85 к 600
+    int movesLeftForYouLabelOffsetX = windowWidth * 20 / 400;  // Отступ от левой границы как 20 к 400
+    int movesLeftForYouLabelOffsetY = windowHeight * 130 / 600; // Отступ от верхней границы как 130 к 600
+
+    movesLeftForYouLabel->setGeometry(movesLeftForYouLabelOffsetX, movesLeftForYouLabelOffsetY, movesLeftForYouLabelWidth, movesLeftForYouLabelHeight);
+
+    // Настройка movesLeftForOpponentLabel
+    int movesLeftForOpponentLabelWidth = windowWidth * 360 / 400;    // Ширина как 360 к 400
+    int movesLeftForOpponentLabelHeight = windowHeight * 85 / 600;  // Высота как 85 к 600
+    int movesLeftForOpponentLabelOffsetX = windowWidth * 20 / 400;  // Отступ от левой границы как 20 к 400
+    int movesLeftForOpponentLabelOffsetY = windowHeight * 195 / 600; // Отступ от верхней границы как 195 к 600
+
+    movesLeftForOpponentLabel->setGeometry(movesLeftForOpponentLabelOffsetX, movesLeftForOpponentLabelOffsetY, movesLeftForOpponentLabelWidth, movesLeftForOpponentLabelHeight);
+
+    // Настройка isOpponentLootedLabel
+    int isOpponentLootedLabelWidth = windowWidth * 340 / 400;    // Ширина как 340 к 400
+    int isOpponentLootedLabelHeight = windowHeight * 140 / 600; // Высота как 140 к 600
+    int isOpponentLootedLabelOffsetX = windowWidth * 30 / 400;  // Отступ от левой границы как 30 к 400
+    int isOpponentLootedLabelOffsetY = windowHeight * 255 / 600; // Отступ от верхней границы как 255 к 600
+
+    isOpponentLootedLabel->setGeometry(isOpponentLootedLabelOffsetX, isOpponentLootedLabelOffsetY, isOpponentLootedLabelWidth, isOpponentLootedLabelHeight);
+
+
+    // Настройка canMakeMoveLabel
+    int canMakeMoveLabelWidth = windowWidth * 340 / 400;    // Ширина как 340 к 400
+    int canMakeMoveLabelHeight = windowHeight * 140 / 600; // Высота как 140 к 600
+    int canMakeMoveLabelOffsetX = windowWidth * 30 / 400;  // Отступ от левой границы как 30 к 400
+    int canMakeMoveLabelOffsetY = windowHeight * 420 / 600; // Отступ от верхней границы как 420 к 600
+>>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
 
     canMakeMoveLabel->setGeometry(canMakeMoveLabelOffsetX, canMakeMoveLabelOffsetY, canMakeMoveLabelWidth, canMakeMoveLabelHeight);
 

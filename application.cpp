@@ -82,6 +82,13 @@ void Application::onReturnToMainMenu()
     findOpponentWidget->resetState();
 }
 
+void Application::onReturnToMainMenu()
+{
+    stackedWidget->setCurrentWidget(mainWidget);
+    mainWidget->start();
+    findOpponentWidget->resetState();
+}
+
 void Application::processData(QByteArray& data)
 {
     QString strData = QString::fromUtf8(data);
@@ -92,7 +99,7 @@ void Application::processData(QByteArray& data)
         stackedWidget->setCurrentWidget(findOpponentWidget);
         mainWidget->resetState();
     } else if (!words.isEmpty() && words.first() == "OpponentFound") {
-        gameWidget->start();
+        //gameWidget->start();
         stackedWidget->setCurrentWidget(gameWidget);
         findOpponentWidget->resetState();
     } else if (!words.isEmpty() && words.first() == "ResultWidget") {

@@ -10,6 +10,7 @@ ResultWidget::ResultWidget(MessageHandler* messageHandler, QWidget *parent)
     windowTitleLabel(new QLabel("Результат игры", this)),
     returnToMainMenuButton(new QPushButton("Выход", this)),
     backgroundPixmap(new QPixmap(":/GameWidgetBackground.jpg"))
+
 {
     messageHandler->addWidget("ResultWidget", this);
     windowTitleLabel->setAlignment(Qt::AlignCenter);

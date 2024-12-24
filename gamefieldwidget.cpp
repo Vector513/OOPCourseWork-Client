@@ -31,9 +31,16 @@ void GameFieldWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
 
+<<<<<<< HEAD
     painter.setBrush(QColor(0, 0, 0, 100));
     painter.drawRect(this->rect());
+=======
+    // Рисуем фон
+    painter.setBrush(QColor(0, 0, 0, 100));  // Полупрозрачный черный фон
+    painter.drawRect(this->rect());  // Покрыть весь виджет
+>>>>>>> 00caf0320acbc8419a14bc4edcc535285bbbf53f
 
+    // Отображаем текст
     QWidget::paintEvent(event);
 }
 
